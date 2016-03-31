@@ -1,0 +1,41 @@
+1. g++
+2. mysql
+[build method]
+1. cd ../recorder/source/
+2. make clean
+3. make // to generate librecorder.so in recorder/source/install/lib
+4. cd ../../sengled-media-process-server
+4. make clean
+6. make // to generate media_process_server
+7. cd ../../release
+8. mkdir media_process_server.0.0.x
+9. cd media_process_server.0.0.x
+10. cp -r ../../recorder/source/install/lib/* ./
+11. cp ../../sengled-media-process-server/media_process* ./
+12. cd ..
+13. tar czf media_process_server.0.0.x.tar.gz ./media_process_server
+[commit to aws]
+1. scp -i ~/workspace/sengled_cloud_awscn.pem -P 22022  \
+   ./media_process_server-x.x.x.tar.gz  ec2-user@54.223.216.183:~/
+2. ssh -i ~/workspace/sengled_cloud_awscn.pem -p 22022 \
+    ec2-user@54.223.216.183
+3. sudo service sengled-screenshot_server stop
+4. sudo service sengled-screenshot_server status
+5. sudo service sengled-screenshot_jni stop
+6. sudo service sengled-screenshot_jni status
+7. mv ~/media_process_server-x.x.x.tar.gz /opt/sengled/apps
+8. cd /opt/sengled/apps
+9. backup old program
+10. cp media_process_server-0.0.1/cShell ./
+9. tar xf media_process_server-x.x.x.tar.gz
+10. mv media_process_server-x.x.x media_process_server-0.0.1
+11. sudo service sengled-screenshot_jni start
+12. sudo service sengled-screenshot_server start
+13. vi /var/log/sengled/screenshotserver/media_process_server.ip-172-31-31-246.cloud.log.INFO.x.x.x.x
+
+[upload file to ftp]
+1. ftp 10.100.100.86 10021
+2. cd snap-storage
+3. binary
+4. put snap-storage-v1.0.4.tar.gz
+5. bye
